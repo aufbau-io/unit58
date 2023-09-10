@@ -1,6 +1,6 @@
 {
-	"name": "aufbau",
-	"version": "0.5.0",
+	"name": "unit-58",
+	"version": "0.1.0",
 	"scripts": {
 		"dev": "vite dev --port 3000",
 		"build": "vite build",

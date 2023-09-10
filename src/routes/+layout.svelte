@@ -11,7 +11,7 @@
 
 	onMount(async () => {
 
-		const module = await import('$lib/graphics/three.svelte');
+		const module = await import('$lib/graphics/three3d.svelte');
 		Geometry = module.default;
 
 		function getDeviceType() {
@@ -38,10 +38,10 @@
 </script>
 
 <svelte:head>
-	<title>AUFBAU</title>
-	<meta name="description" content="AUFBAU :: WEB 1.0 Re-Imagined" />
+	<title>WebGL Volumetric Renderer Demo</title>
+	<meta name="description" content="DEMO DEMO DEMO" />
 
-	<link
+	<!-- <link
 		rel="preload"
 		href="/fonts/NB-Architekt-Pro-Light.woff"
 		as="font"
@@ -55,11 +55,11 @@
 		as="font"
 		type="font/woff"
 		crossorigin="anonymous"
-	/>
+	/> -->
 
-	<link rel="preload" href="icons/cv.svg" as="image">
+	<!-- <link rel="preload" href="icons/cv.svg" as="image">
 	<link rel="preload" href="icons/insta.svg" as="image">
-	<link rel="preload" href="icons/mail.svg" as="image">
+	<link rel="preload" href="icons/mail.svg" as="image"> -->
 
 </svelte:head>
 
@@ -67,19 +67,19 @@
 
 {#if $screenType}
 	<main>
-		<header>
+		<!-- <header>
 			<Header />
-		</header>
+		</header> -->
 
-		<body>
+		<!-- <body>
 			<slot />
-		</body>
+		</body> -->
 
-		{#if $screenType == 3}
+		<!-- {#if $screenType == 3}
 		<footer>
 			<Footer />
 		</footer>
-		{/if}
+		{/if} -->
 	</main>
 {/if}
 

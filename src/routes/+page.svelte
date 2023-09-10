@@ -3,7 +3,7 @@
 
 <section>
 	<div class="main">
-		<p>make web fun again</p>
+		<p>keep dancing</p>
 	</div>	
 </section>
 
