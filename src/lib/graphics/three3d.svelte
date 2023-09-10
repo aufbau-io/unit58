@@ -250,9 +250,9 @@
 
 	function init() {
 		camera = new THREE.PerspectiveCamera(20, width / height, 0.1, 10000);
-		camera.position.x = 2; 	
+		camera.position.x = 3; 	
 		camera.position.y = 2; 	
-		camera.position.z = 4; 	
+		camera.position.z = 3; 	
 
 		scene = new THREE.Scene();
 		scene.background = new THREE.Color(0x232323);
