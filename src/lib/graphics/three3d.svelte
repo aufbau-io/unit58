@@ -275,6 +275,10 @@
 				mesh = new THREE.Mesh( geometry, material );
 				scene.add( mesh );
 
+				// Add box helper
+				const box = new THREE.BoxHelper( mesh, 0x808080);
+				scene.add( box );
+
 				const planeGeom = new THREE.PlaneGeometry(1, 1);
 				const planeMat = new THREE.RawShaderMaterial({
 						glslVersion: THREE.GLSL3,
