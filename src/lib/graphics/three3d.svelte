@@ -230,7 +230,7 @@
         float sampledValue = texture(map, samplePos).r; // Renamed variable
         color  = vec4(vec3(sampledValue), 1.0); // Always opacity 1
 
-				if ( color.x < threshold ) color = vec4(0.,0.137,0.137,1.0);
+				if ( color.x < threshold ) color = vec4(0.137,0.137,0.137,1.0);
 				if ( color.y < threshold ) color = vec4(0.137,0.137,0.137,1.0);
 				if ( color.z < threshold ) color = vec4(0.137,0.137,0.137,1.0);
     }
@@ -244,7 +244,9 @@
 
 	function init() {
 		camera = new THREE.PerspectiveCamera(20, width / height, 0.1, 10000);
-		camera.position.z = 5; 	
+		camera.position.x = 2; 	
+		camera.position.y = 2; 	
+		camera.position.z = 4; 	
 
 		scene = new THREE.Scene();
 		scene.background = new THREE.Color(0x232323);
@@ -276,7 +278,7 @@
 				uniforms: {
 					map: { value: texture },
 					cameraPos: { value: new THREE.Vector3() },
-					threshold: { value: 0.6 },
+					threshold: { value: 0.5 },
 					steps: { value: 200 },
 					baseOpacity: { value: 0.5 },
 				},
@@ -300,7 +302,7 @@
 						uniforms: {
 								map: { value: texture },
 								cameraPos: { value: new THREE.Vector3() },
-								threshold: { value: 0.6 },
+								threshold: { value: 0.5 },
 								steps: { value: 200 },
 								baseOpacity: { value: 1.0 },
 								slicePosition: { value: 0.5 },
@@ -311,7 +313,6 @@
 						side: THREE.DoubleSide
 				});
 				const plane = new THREE.Mesh(planeGeom, planeMat);
-				plane.visible = false; 
 				planes.push(plane);
 				scene.add(plane);
 			}
@@ -358,7 +359,7 @@
 					});
 				}
 
-			const parameters = { threshold: 0.4, steps: 200, baseOpacity: 0.5 };
+			const parameters = { threshold: 0.5, steps: 200, baseOpacity: 0.5 };
 
 				const gui = new GUI();
 				gui.add( parameters, 'threshold', 0, 1, 0.01 ).onChange( updateMaterial );
@@ -367,13 +368,14 @@
 
 				const planeFolder = gui.addFolder('Planes');
 				const planeData = {
-						'X Plane': false,
+						'X Plane': true,
 						'X Position': 0,
-						'Y Plane': false,
+						'Y Plane': true,
 						'Y Position': 0,
-						'Z Plane': false,
+						'Z Plane': true,
 						'Z Position': 0,
 				};
+				
 
 				planeFolder.add(planeData, 'X Plane').name('Show X Plane').onChange(updatePlanes);
 				planeFolder.add(planeData, 'X Position', -0.5, 0.5).onChange(updatePlanes);
