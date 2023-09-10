@@ -220,7 +220,7 @@
         vec3 samplePos;
 
         if (sliceAxis == 0) {
-            samplePos = vec3(slicePosition, vUv.y, vUv.x);
+            samplePos = vec3(slicePosition, vUv.y, 1.0 - vUv.x); // something is inverted here
         } else if (sliceAxis == 1) {
             samplePos = vec3(vUv.x, slicePosition, vUv.y);
         } else {
