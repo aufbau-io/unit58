@@ -230,9 +230,9 @@
         float sampledValue = texture(map, samplePos).r; // Renamed variable
         color  = vec4(vec3(sampledValue), 1.0); // Always opacity 1
 
-				if ( color.x < threshold ) color = vec4(0.35,0.35,0.35,1.0);
-				if ( color.y < threshold ) color = vec4(0.35,0.35,0.35,1.0);
-				if ( color.z < threshold ) color = vec4(0.35,0.35,0.35,1.0);
+				if ( color.x < threshold ) color = vec4(0.3,0.3,0.3,1.0);
+				if ( color.y < threshold ) color = vec4(0.3,0.3,0.3,1.0);
+				if ( color.z < threshold ) color = vec4(0.3,0.3,0.3,1.0);
     }
 `;
 
