@@ -233,6 +233,12 @@
 				if ( color.x < threshold ) color = vec4(0.137,0.137,0.137,1.0);
 				if ( color.y < threshold ) color = vec4(0.137,0.137,0.137,1.0);
 				if ( color.z < threshold ) color = vec4(0.137,0.137,0.137,1.0);
+
+				// Check if the pixel is at the edge and set its color to white
+        float edgeThreshold = 0.001; // Small value to account for potential inaccuracies
+        if(vUv.x < edgeThreshold || vUv.x > 1.0 - edgeThreshold || vUv.y < edgeThreshold || vUv.y > 1.0 - edgeThreshold) {
+            color = vec4(0.5, 0.5, 0.5, 1.0); // Set color to white
+        }
     }
 `;
 
