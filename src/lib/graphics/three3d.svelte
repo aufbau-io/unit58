@@ -72,8 +72,6 @@
 	const planeHelpers = [];
 	const planeMatrices = [];
 
-	// In the setHome function, after the existing GUI controls:
-
 
   // ---------------------------------------------------------------------------
 	// Material ------------------------------------------------------------------
@@ -215,6 +213,7 @@
 
     uniform sampler3D map;
     uniform float slicePosition;
+		uniform float threshold;
     uniform int sliceAxis; // 0 = X, 1 = Y, 2 = Z
 
     void main() {
@@ -230,6 +229,10 @@
 
         float sampledValue = texture(map, samplePos).r; // Renamed variable
         color  = vec4(vec3(sampledValue), 1.0); // Always opacity 1
+
+				if ( color.x < threshold ) color = vec4(0.35,0.35,0.35,1.0);
+				if ( color.y < threshold ) color = vec4(0.35,0.35,0.35,1.0);
+				if ( color.z < threshold ) color = vec4(0.35,0.35,0.35,1.0);
     }
 `;
 
@@ -268,49 +271,49 @@
 
 	function setHome () {
 		const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-				const material = new THREE.RawShaderMaterial( {
-					glslVersion: THREE.GLSL3,
-					uniforms: {
-						map: { value: texture },
-						cameraPos: { value: new THREE.Vector3() },
-						threshold: { value: 0.6 },
-						steps: { value: 200 },
-						baseOpacity: { value: 0.5 },
-					},
-					vertexShader,
-					fragmentShader,
-					side: THREE.BackSide,
-					transparent: true,
-				} );
+			const material = new THREE.RawShaderMaterial( {
+				glslVersion: THREE.GLSL3,
+				uniforms: {
+					map: { value: texture },
+					cameraPos: { value: new THREE.Vector3() },
+					threshold: { value: 0.6 },
+					steps: { value: 200 },
+					baseOpacity: { value: 0.5 },
+				},
+				vertexShader,
+				fragmentShader,
+				side: THREE.BackSide,
+				transparent: true,
+			} );
 
-				mesh = new THREE.Mesh( geometry, material );
-				scene.add( mesh );
+			mesh = new THREE.Mesh( geometry, material );
+			scene.add( mesh );
 
-				// Add box helper
-				const box = new THREE.BoxHelper( mesh, 0x808080);
-				scene.add( box );
+			// Add box helper
+			const box = new THREE.BoxHelper( mesh, 0x808080);
+			scene.add( box );
 
-				for (let i = 0; i < 3; i++) {
-					const planeGeom = new THREE.PlaneGeometry(1, 1);
-					const planeMat = new THREE.RawShaderMaterial({
-							glslVersion: THREE.GLSL3,
-							uniforms: {
-									map: { value: texture },
-									cameraPos: { value: new THREE.Vector3() },
-									threshold: { value: 0.6 },
-									steps: { value: 200 },
-									baseOpacity: { value: 1.0 },
-									slicePosition: { value: 0.5 },
-									sliceAxis: { value: null },
-							},
-							vertexShader: planeVertexShader,
-							fragmentShader: planeFragmentShader,
-							side: THREE.DoubleSide
-					});
-					const plane = new THREE.Mesh(planeGeom, planeMat);
-					plane.visible = false; 
-					planes.push(plane);
-					scene.add(plane);
+			for (let i = 0; i < 3; i++) {
+				const planeGeom = new THREE.PlaneGeometry(1, 1);
+				const planeMat = new THREE.RawShaderMaterial({
+						glslVersion: THREE.GLSL3,
+						uniforms: {
+								map: { value: texture },
+								cameraPos: { value: new THREE.Vector3() },
+								threshold: { value: 0.6 },
+								steps: { value: 200 },
+								baseOpacity: { value: 1.0 },
+								slicePosition: { value: 0.5 },
+								sliceAxis: { value: null },
+						},
+						vertexShader: planeVertexShader,
+						fragmentShader: planeFragmentShader,
+						side: THREE.DoubleSide
+				});
+				const plane = new THREE.Mesh(planeGeom, planeMat);
+				plane.visible = false; 
+				planes.push(plane);
+				scene.add(plane);
 			}
 
 
@@ -329,10 +332,11 @@
 					material.uniforms.steps.value = parameters.steps;
 					material.uniforms.baseOpacity.value = parameters.baseOpacity;
 
+
 					planes.forEach(plane => {
 						plane.material.uniforms.threshold.value = parameters.threshold;
 						plane.material.uniforms.steps.value = parameters.steps;
-						plane.material.uniforms.baseOpacity.value = 1.0;  // make sure it's opaque
+						plane.material.uniforms.baseOpacity.value = 1.0;
 				});
 			}
 
