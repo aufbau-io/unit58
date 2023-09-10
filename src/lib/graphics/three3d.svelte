@@ -358,7 +358,7 @@
 					});
 				}
 
-			const parameters = { threshold: 0.6, steps: 200, baseOpacity: 0.5 };
+			const parameters = { threshold: 0.4, steps: 200, baseOpacity: 0.5 };
 
 				const gui = new GUI();
 				gui.add( parameters, 'threshold', 0, 1, 0.01 ).onChange( updateMaterial );
