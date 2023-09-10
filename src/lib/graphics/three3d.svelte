@@ -189,40 +189,51 @@
 		}
 	`;
 
-	// // Plane shaders
-	// const planeVertexShader = /* glsl */`
-	// 	in vec3 position;
-	// 	in vec2 uv;
+	// Plane shaders
+	const planeVertexShader = /* glsl */`
+		in vec3 position;
+		in vec2 uv;
 
-	// 	uniform mat4 modelViewMatrix;
-	// 	uniform mat4 projectionMatrix;
+		uniform mat4 modelViewMatrix;
+		uniform mat4 projectionMatrix;
 
-	// 	out vec2 vUv;
+		out vec2 vUv;
 
-	// 	void main() {
-	// 			vUv = uv;
-	// 			gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-	// 	}
-	// `;
+		void main() {
+			vUv = uv;
+			gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+		}
+	`;
 
-	// const planeFragmentShader = /* glsl */`
-	// 	precision highp float;
-	// 	precision highp sampler3D;
+	const planeFragmentShader = /* glsl */`
+    precision highp float;
+    precision highp sampler3D;
 
-	// 	in vec2 vUv;
-		
-	// 	out vec4 color;
+    in vec2 vUv;
 
-	// 	uniform sampler3D map;
-	// 	uniform float slicePosition;
+    out vec4 color;
 
-	// 	void main() {
-	// 			// This depends on which plane you're rendering. For X-plane for example:
-	// 			vec3 samplePos = vec3(slicePosition, vUv.y, vUv.x);
-	// 			float sample = texture(map, samplePos).r;
-	// 			color = vec4(vec3(sample), 1.0); // Always opacity 1
-	// 	}
-	// `;
+    uniform sampler3D map;
+    uniform float slicePosition;
+    uniform int sliceAxis; // 0 = X, 1 = Y, 2 = Z
+
+    void main() {
+        vec3 samplePos;
+
+        if (sliceAxis == 0) {
+            samplePos = vec3(slicePosition, vUv.y, vUv.x);
+        } else if (sliceAxis == 1) {
+            samplePos = vec3(vUv.x, slicePosition, vUv.y);
+        } else {
+            samplePos = vec3(vUv.x, vUv.y, slicePosition);
+        }
+
+        float sampledValue = texture(map, samplePos).r; // Renamed variable
+        color  = vec4(vec3(sampledValue), 1.0); // Always opacity 1
+    }
+`;
+
+
 
 
 	init();
@@ -279,23 +290,23 @@
 				const box = new THREE.BoxHelper( mesh, 0x808080);
 				scene.add( box );
 
-				const planeGeom = new THREE.PlaneGeometry(1, 1);
-				const planeMat = new THREE.RawShaderMaterial({
-						glslVersion: THREE.GLSL3,
-						uniforms: {
-								map: { value: texture },
-								cameraPos: { value: new THREE.Vector3() },
-								threshold: { value: 0.6 },
-								steps: { value: 200 },
-								baseOpacity: { value: 1.0 },
-								slicePosition: { value: 0.5 },
-						},
-						vertexShader,
-						fragmentShader,
-						side: THREE.DoubleSide
-				});
-
 				for (let i = 0; i < 3; i++) {
+					const planeGeom = new THREE.PlaneGeometry(1, 1);
+					const planeMat = new THREE.RawShaderMaterial({
+							glslVersion: THREE.GLSL3,
+							uniforms: {
+									map: { value: texture },
+									cameraPos: { value: new THREE.Vector3() },
+									threshold: { value: 0.6 },
+									steps: { value: 200 },
+									baseOpacity: { value: 1.0 },
+									slicePosition: { value: 0.5 },
+									sliceAxis: { value: null },
+							},
+							vertexShader: planeVertexShader,
+							fragmentShader: planeFragmentShader,
+							side: THREE.DoubleSide
+					});
 					const plane = new THREE.Mesh(planeGeom, planeMat);
 					plane.visible = false; 
 					planes.push(plane);
@@ -306,6 +317,10 @@
 				// Align planes
 				planes[0].rotateY(Math.PI / 2);
 				planes[1].rotateX(Math.PI / 2);
+
+				planes[0].material.uniforms.sliceAxis.value = 0;
+				planes[1].material.uniforms.sliceAxis.value = 1;
+				planes[2].material.uniforms.sliceAxis.value = 2;
 
 				// gui -----------------------------------------------------------------
 
