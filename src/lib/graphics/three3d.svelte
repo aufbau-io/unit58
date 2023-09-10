@@ -135,7 +135,7 @@
 			return texture( map, p ).r;
 		}
 
-		#define epsilon .01
+		#define epsilon .001
 
 		vec3 normal( vec3 coord ) {
 			if ( coord.x < epsilon ) return vec3( 1.0, 0.0, 0.0 );
