@@ -286,7 +286,7 @@
 					cameraPos: { value: new THREE.Vector3() },
 					threshold: { value: 0.5 },
 					steps: { value: 200 },
-					baseOpacity: { value: 0.5 },
+					baseOpacity: { value: 0.7 },
 				},
 				vertexShader,
 				fragmentShader,
